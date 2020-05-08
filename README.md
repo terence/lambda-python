@@ -6,7 +6,7 @@ AWS Lambda Python Repo
 # Components
 - Code Packaging
 - Deployment structure
--- Layer configuration
+  - Layer configuration
 - Test Configurations
 - Metatags, VPC, security configurations
 - Documentation
