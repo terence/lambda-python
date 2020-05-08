@@ -1,7 +1,8 @@
 # lambda-python
 AWS Lambda Python Repo
-- Potentially contain a few lambdas + libraries
-
+- Design of a Lambda repository used for deployment
+- Potentially contain a few lambdas + layers + libraries
+- Document a deployment process
 
 # Components
 - Code Packaging
