@@ -107,10 +107,14 @@ case "$SELECTION" in
 
 "111" )
   echo "===== AWS Lambda Create Function:" $PROFILE
+  cd lambda-helloworld1
+  rm lambda-helloworld1.zip
+  zip -r lambda-helloworld1.zip .
+  cd ..
   aws lambda create-function \
     --function-name terence-test1 \
     --runtime python3.6 \
-    --zip-file fileb://lambda-helloworld1.zip \
+    --zip-file fileb://lambda-helloworld1/lambda-helloworld1.zip \
     --handler lambda_function.lambda_handler \
     --role arn:aws:iam::832435373672:role/service-role/lambda-helloworld1-role-rpwjd1ud \
     --profile $PROFILE \
