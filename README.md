@@ -14,3 +14,6 @@ AWS Lambda Python Repo
 
 # References
 - https://docs.aws.amazon.com/lambda/latest/dg/python-package.html
+- https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html
+
+
