@@ -90,14 +90,16 @@ case "$SELECTION" in
 
 "110" )
   echo "===== AWS Lambda Create Function:" $PROFILE
-  cd lambda-helloworld1
-  rm lambda-helloworld1.zip
-  zip -r lambda-helloworld1.zip .
+  FUNCTION_CODE="lambda-helloworld1"
+  FUNCTION_NAME="terence-test1"
+  cd $FUNCTION_CODE
+  rm $FUNCTION_CODE.zip
+  zip -r $FUNCTION_CODE.zip .
   cd ..
   aws lambda create-function \
-    --function-name terence-test1 \
+    --function-name $FUNCTION_NAME \
     --runtime python3.8 \
-    --zip-file fileb://lambda-helloworld1/lambda-helloworld1.zip \
+    --zip-file fileb://$FUNCTION_CODE/$FUNCTION_CODE.zip \
     --handler lambda_function.lambda_handler \
     --role arn:aws:iam::832435373672:role/service-role/lambda-helloworld1-role-rpwjd1ud \
     --profile $PROFILE \
@@ -107,15 +109,15 @@ case "$SELECTION" in
 
 "111" )
   echo "===== AWS Lambda Update Function Code:" $PROFILE
-  FUNCTION_CODE="lambda-helloworld1"
+  FUNCTION_CODE="lambda-dynamo"
   FUNCTION_NAME="terence-test1"
   cd $FUNCTION_CODE
   rm $FUNCTION_CODE.zip
-  zip -r lambda-helloworld1.zip .
+  zip -r $FUNCTION_CODE.zip .
   cd ..
   aws lambda update-function-code \
-    --function-name terence-test1 \
-    --zip-file fileb://lambda-helloworld1/lambda-helloworld1.zip \
+    --function-name $FUNCTION_NAME \
+    --zip-file fileb://$FUNCTION_CODE/$FUNCTION_CODE.zip \
     --profile $PROFILE \
     --output $OUTPUT
   ;;
