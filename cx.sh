@@ -22,9 +22,19 @@ echo ----------------------------------------------
 echo 100 : AWS Lambda Account Settings
 echo 101 : AWS Lambda List Functions
 echo 102 : AWS Lambda List Layers
+echo 110 : AWS Lambda Create Zip
+echo 111 : AWS Lambda Create Function
 echo ----------------------------------------------
+
+
+
+
 echo Enter [Selection] to continue
 echo =============================================================
+
+
+
+
 
 # Command line selection
 if [ -n "$1" ]; then
@@ -60,6 +70,52 @@ case "$SELECTION" in
   # aws s3 sync local s3://remote
   ;;
 
+"100" )
+  echo "===== AWS Lambda Get Account Settings:" $PROFILE
+  aws lambda get-account-settings \
+    --profile $PROFILE \
+    --output $OUTPUT
+  ;;
+
+
+"101" )
+  echo "===== AWS Lambda List Functions:" $PROFILE
+  aws lambda list-functions \
+    --profile $PROFILE \
+    --output $OUTPUT
+  ;;
+
+
+"102" )
+  echo "===== AWS Lambda List Layers:" $PROFILE
+  aws lambda list-layers \
+    --profile $PROFILE \
+    --output $OUTPUT
+  ;;
+
+
+
+"110" )
+  echo "===== AWS Lambda Create Zip:" $PROFILE
+  cd ./lambda-helloworld1/
+  zip -r ../lambda-helloworld1.zip *
+  ;;
+
+
+
+
+
+"111" )
+  echo "===== AWS Lambda Create Function:" $PROFILE
+  aws lambda create-function \
+    --function-name terence-test1 \
+    --runtime python3.6 \
+    --zip-file fileb://lambda-helloworld1.zip \
+    --handler lambda_function.lambda_handler \
+    --role arn:aws:iam::832435373672:role/service-role/lambda-helloworld1-role-rpwjd1ud \
+    --profile $PROFILE \
+    --output $OUTPUT
+  ;;
 
 
 
