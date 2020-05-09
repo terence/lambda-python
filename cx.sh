@@ -24,6 +24,9 @@ echo 110 : AWS Lambda Create Function
 echo 111 : AWS Lambda Update Function Code
 echo 112 : AWS Lambda Delete Function
 echo ----------------------------------------------
+echo 200 : V-Env Create
+echo 201 : V-Env Activate
+echo ----------------------------------------------
 echo Enter [Selection] to continue
 echo =============================================================
 
@@ -93,7 +96,7 @@ case "$SELECTION" in
   cd ..
   aws lambda create-function \
     --function-name terence-test1 \
-    --runtime python3.6 \
+    --runtime python3.8 \
     --zip-file fileb://lambda-helloworld1/lambda-helloworld1.zip \
     --handler lambda_function.lambda_handler \
     --role arn:aws:iam::832435373672:role/service-role/lambda-helloworld1-role-rpwjd1ud \
