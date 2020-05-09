@@ -12,3 +12,5 @@ AWS Lambda Python Repo
 - Metatags, VPC, security configurations
 - Documentation
 
+# References
+- https://docs.aws.amazon.com/lambda/latest/dg/python-package.html
