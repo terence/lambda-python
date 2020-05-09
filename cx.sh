@@ -10,8 +10,6 @@ REGION="ap-southeast-2"
 OUTPUT="json"
 EMR_CLUSTER_ID="xxx"
 
-
-
 echo =============================================================
 echo Hi $USER@$HOSTNAME. You are in $PWD directory.
 echo -------------------------------------------------------------
@@ -22,19 +20,12 @@ echo ----------------------------------------------
 echo 100 : AWS Lambda Account Settings
 echo 101 : AWS Lambda List Functions
 echo 102 : AWS Lambda List Layers
-echo 110 : AWS Lambda Create Zip
-echo 111 : AWS Lambda Create Function
+echo 110 : AWS Lambda Create Function
+echo 111 : AWS Lambda Update Function Code
+echo 112 : AWS Lambda Delete Function
 echo ----------------------------------------------
-
-
-
-
 echo Enter [Selection] to continue
 echo =============================================================
-
-
-
-
 
 # Command line selection
 if [ -n "$1" ]; then
@@ -94,18 +85,7 @@ case "$SELECTION" in
   ;;
 
 
-
 "110" )
-  echo "===== AWS Lambda Create Zip:" $PROFILE
-  cd ./lambda-helloworld1/
-  zip -r ../lambda-helloworld1.zip *
-  ;;
-
-
-
-
-
-"111" )
   echo "===== AWS Lambda Create Function:" $PROFILE
   cd lambda-helloworld1
   rm lambda-helloworld1.zip
@@ -117,6 +97,33 @@ case "$SELECTION" in
     --zip-file fileb://lambda-helloworld1/lambda-helloworld1.zip \
     --handler lambda_function.lambda_handler \
     --role arn:aws:iam::832435373672:role/service-role/lambda-helloworld1-role-rpwjd1ud \
+    --profile $PROFILE \
+    --output $OUTPUT
+  ;;
+
+
+"111" )
+  echo "===== AWS Lambda Update Function Code:" $PROFILE
+  FUNCTION_CODE="lambda-helloworld1"
+  FUNCTION_NAME="terence-test1"
+  cd $FUNCTION_CODE
+  rm $FUNCTION_CODE.zip
+  zip -r lambda-helloworld1.zip .
+  cd ..
+  aws lambda update-function-code \
+    --function-name terence-test1 \
+    --zip-file fileb://lambda-helloworld1/lambda-helloworld1.zip \
+    --profile $PROFILE \
+    --output $OUTPUT
+  ;;
+
+
+"112" )
+  echo "===== AWS Lambda Delete Function:" $PROFILE
+  FUNCTION_CODE="lambda-helloworld1"
+  FUNCTION_NAME="terence-test1"
+  aws lambda delete-function \
+    --function-name $FUNCTION_NAME \
     --profile $PROFILE \
     --output $OUTPUT
   ;;
