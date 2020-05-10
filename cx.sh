@@ -9,6 +9,8 @@ PROFILE="ipadev"
 REGION="ap-southeast-2"
 OUTPUT="json"
 EMR_CLUSTER_ID="xxx"
+FUNCTION_CODE="lambda-dynamo"
+FUNCTION_NAME="terence-test1"
 
 echo =============================================================
 echo Hi $USER@$HOSTNAME. You are in $PWD directory.
@@ -23,6 +25,8 @@ echo 102 : AWS Lambda List Layers
 echo 110 : AWS Lambda Create Function
 echo 111 : AWS Lambda Update Function Code
 echo 112 : AWS Lambda Delete Function
+echo 113 : AWS Lambda Get Function Configuration
+echo 114 : AWS Lambda Update Function Configuration
 echo ----------------------------------------------
 echo 200 : V-Env Create
 echo 201 : V-Env Activate
@@ -90,8 +94,6 @@ case "$SELECTION" in
 
 "110" )
   echo "===== AWS Lambda Create Function:" $PROFILE
-  FUNCTION_CODE="lambda-helloworld1"
-  FUNCTION_NAME="terence-test1"
   cd $FUNCTION_CODE
   rm $FUNCTION_CODE.zip
   zip -r $FUNCTION_CODE.zip .
@@ -109,8 +111,6 @@ case "$SELECTION" in
 
 "111" )
   echo "===== AWS Lambda Update Function Code:" $PROFILE
-  FUNCTION_CODE="lambda-dynamo"
-  FUNCTION_NAME="terence-test1"
   cd $FUNCTION_CODE
   rm $FUNCTION_CODE.zip
   zip -r $FUNCTION_CODE.zip .
@@ -125,13 +125,33 @@ case "$SELECTION" in
 
 "112" )
   echo "===== AWS Lambda Delete Function:" $PROFILE
-  FUNCTION_CODE="lambda-helloworld1"
-  FUNCTION_NAME="terence-test1"
   aws lambda delete-function \
     --function-name $FUNCTION_NAME \
     --profile $PROFILE \
     --output $OUTPUT
   ;;
+
+
+"113" )
+  echo "===== AWS Lambda Get Function Configuration:" $PROFILE
+  aws lambda get-function-configuration \
+    --function-name $FUNCTION_NAME \
+    --profile $PROFILE \
+    --output $OUTPUT
+  ;;
+
+
+"114" )
+  echo "===== AWS Lambda Update Function Configuration:" $PROFILE
+  aws lambda update-function-configuration \
+    --function-name $FUNCTION_NAME \
+    --memory-size 256
+		--profile $PROFILE \
+    --output $OUTPUT
+  ;;
+
+
+
 
 
 
