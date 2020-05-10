@@ -1,35 +1,7 @@
 
 import boto3
 import json
-
-ddb = boto3.resource('dynamodb')
-table = ddb.Table('MusicCollection')
-
-
-def insert():
-    table.put_item(
-        Item={
-            'Artist': "Bob Builder",
-            'SongTitle': "Dig dig",
-        }
-    ) 
-    print("PutItem succeeded:")
-
-
-def read():
-    response = table.get_item(
-        Key={
-            'Artist': "Bob Builder",
-            'SongTitle': "Dig dig",
-        }
-    )
-    print(response['Item'])
-    print("Read Item succeeded:")
-
-
-def update():
-    print("Update Item succeeded:")
-
+from dynamo import music
 
 
 def lambda_handler(event, context):
@@ -42,8 +14,8 @@ def lambda_handler(event, context):
     print("Request ID:",context.aws_request_id)
     print("Mem. limits(MB):", context.memory_limit_in_mb)
 
-    insert()
-    read()
+    music.insert()
+    music.read()
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda for Dynamo Management!')
