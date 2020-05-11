@@ -7,7 +7,14 @@ from dynamo import music
 def lambda_handler(event, context):
     # TODO implement
     print("Hello from Lambda!")
+
+
+    # EVENT Vars
     print(f"event: {event}")
+    key1 = event["key1"]
+    print("Key1:", key1)
+
+    # CONTEXT Vars
     print(f"context: {context}")
     print("Log stream name:", context.log_stream_name)
     print("Log group name:",  context.log_group_name)
