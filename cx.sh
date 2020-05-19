@@ -24,9 +24,10 @@ echo 101 : AWS Lambda List Functions
 echo 102 : AWS Lambda List Layers
 echo 110 : AWS Lambda Create Function
 echo 111 : AWS Lambda Update Function Code
-echo 112 : AWS Lambda Delete Function
-echo 113 : AWS Lambda Get Function Configuration
-echo 114 : AWS Lambda Update Function Configuration
+echo 112 : AWS Lambda Invoke Function
+echo 113 : AWS Lambda Delete Function
+echo 114 : AWS Lambda Get Function Configuration
+echo 115 : AWS Lambda Update Function Configuration
 echo ----------------------------------------------
 echo 200 : V-Env Create
 echo 201 : V-Env Activate
@@ -122,8 +123,20 @@ case "$SELECTION" in
     --output $OUTPUT
   ;;
 
-
 "112" )
+  echo "===== AWS Lambda Invoke Function:" $PROFILE
+  FUNCTION_NAME="terence-test3"
+	aws lambda invoke \
+    --function-name $FUNCTION_NAME \
+		--profile $PROFILE \
+    --output $OUTPUT \
+		response.json
+  ;;
+
+#    --invocation-type Event \
+#		-- payload '{"key1":"value1"}' \
+
+"113" )
   echo "===== AWS Lambda Delete Function:" $PROFILE
   aws lambda delete-function \
     --function-name $FUNCTION_NAME \
@@ -132,7 +145,7 @@ case "$SELECTION" in
   ;;
 
 
-"113" )
+"114" )
   echo "===== AWS Lambda Get Function Configuration:" $PROFILE
   aws lambda get-function-configuration \
     --function-name $FUNCTION_NAME \
@@ -141,7 +154,7 @@ case "$SELECTION" in
   ;;
 
 
-"114" )
+"115" )
   echo "===== AWS Lambda Update Function Configuration:" $PROFILE
   aws lambda update-function-configuration \
     --function-name $FUNCTION_NAME \
