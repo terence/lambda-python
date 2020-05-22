@@ -9,6 +9,7 @@ PROFILE="ipadev"
 REGION="ap-southeast-2"
 OUTPUT="json"
 EMR_CLUSTER_ID="xxx"
+S3CODE="ipa-bia-codebase"
 FUNCTION_CODE="lambda-dynamo"
 FUNCTION_NAME="terence-test1"
 
@@ -188,9 +189,10 @@ case "$SELECTION" in
 
 "200" )
   echo "===== Zip Python Package:" $PROFILE
-  cd v-env/lib/python3.7/site-packages
-	zip -r9 pandas.zip pandas*
-#	zip -r ./v-env/lib/python3.7.zip /v-env/lib/pythohn3.7/ \
+  LAYER_NAME="pandas"
+  LAYER_CODE="${LAYER_NAME}-layer.zip"
+  cd layer-$LAYER_NAME
+	zip -r $LAYER_NAME-layer.zip python
   ;;
 
 
@@ -198,7 +200,7 @@ case "$SELECTION" in
   echo "===== S3 Upload Layer to S3:" $PROFILE
   LAYER_NAME="flask"
   LAYER_CODE="${LAYER_NAME}-layer.zip"
-	aws s3 cp ./layer-$LAYER_NAME/$LAYER_CODE s3://ipa-bia-codebase/ \
+	aws s3 cp ./layer-$LAYER_NAME/$LAYER_CODE s3://$S3CODE/ \
 		--profile $PROFILE \
     --output $OUTPUT
   ;;
@@ -211,7 +213,7 @@ case "$SELECTION" in
 	aws lambda publish-layer-version \
     --layer-name $LAYER_NAME \
 		--description "${LAYER_NAME} Layer" \
-		--content S3Bucket=ipa-bia-codebase,S3Key=$LAYER_CODE
+		--content S3Bucket=$S3CODE,S3Key=$LAYER_CODE
 #		--compatible-runtimes python3.7 \
     --profile $PROFILE \
     --output $OUTPUT
