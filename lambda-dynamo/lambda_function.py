@@ -8,7 +8,6 @@ def lambda_handler(event, context):
     # TODO implement
     print("Hello from Lambda!")
 
-
     # EVENT Vars
     print(f"event: {event}")
     key1 = event["key1"]

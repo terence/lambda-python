@@ -1,7 +1,7 @@
 # AWS Lambda Scripts Command-line Assistant
 #================================================================
 clear
-#source ./vars.sh
+source ./vars.sh
 PWD=pwd
 
 # DEFAULTS
@@ -17,7 +17,7 @@ echo Hi $USER@$HOSTNAME. You are in $PWD directory.
 echo -------------------------------------------------------------
 echo 001 : AWS Configure
 echo 002 : AWS S3 List
-echo 003 : AWS Lambda
+echo 003 : AWS STS Assume Role Session
 echo ----------------------------------------------
 echo 100 : AWS Lambda Account Settings
 echo 101 : AWS Lambda List Functions
@@ -29,8 +29,12 @@ echo 113 : AWS Lambda Delete Function
 echo 114 : AWS Lambda Get Function Configuration
 echo 115 : AWS Lambda Update Function Configuration
 echo ----------------------------------------------
-echo 200 : V-Env Create
-echo 201 : V-Env Activate
+echo 200 : AWS Zip Python Package
+echo 201 : AWS S3 Upload Layer to S3
+echo 202 : AWS Lambda publish-layer-version
+echo ----------------------------------------------
+echo 500 : V-Env Create
+echo 501 : V-Env Activate
 echo ----------------------------------------------
 echo Enter [Selection] to continue
 echo =============================================================
@@ -69,6 +73,18 @@ case "$SELECTION" in
   # aws s3 sync local s3://remote
   ;;
 
+
+"003" )
+  echo "===== AWS Assume Role:" $PROFILE
+  aws sts assume-role \
+    --role-arn "$STS_ROLE" \
+    --role-session-name AWSCLI-Session
+  aws sts get-caller-identity \
+    --profile $PROFILE
+  ;;
+
+
+
 "100" )
   echo "===== AWS Lambda Get Account Settings:" $PROFILE
   aws lambda get-account-settings \
@@ -99,9 +115,12 @@ case "$SELECTION" in
   rm $FUNCTION_CODE.zip
   zip -r $FUNCTION_CODE.zip .
   cd ..
-  aws lambda create-function \
+  aws s3 cp ./$FUNCTION_CODE/$FUNCTION_CODE.zip s3://ipa-bia-codebase/
+	
+	aws lambda create-function \
     --function-name $FUNCTION_NAME \
     --runtime python3.8 \
+		--code S3Bucket='s3://ipa-bia-code/',S3Key="${FUNCTION_NAME}"
     --zip-file fileb://$FUNCTION_CODE/$FUNCTION_CODE.zip \
     --handler lambda_function.lambda_handler \
     --role arn:aws:iam::832435373672:role/service-role/lambda-helloworld1-role-rpwjd1ud \
@@ -164,6 +183,48 @@ case "$SELECTION" in
   ;;
 
 
+
+
+
+"200" )
+  echo "===== Zip Python Package:" $PROFILE
+  cd v-env/lib/python3.7/site-packages
+	zip -r9 pandas.zip pandas*
+#	zip -r ./v-env/lib/python3.7.zip /v-env/lib/pythohn3.7/ \
+  ;;
+
+
+"201" )
+  echo "===== S3 Upload Layer to S3:" $PROFILE
+  LAYER_NAME="flask"
+  LAYER_CODE="${LAYER_NAME}-layer.zip"
+	aws s3 cp ./layer-$LAYER_NAME/$LAYER_CODE s3://ipa-bia-codebase/ \
+		--profile $PROFILE \
+    --output $OUTPUT
+  ;;
+
+
+"202" )
+  echo "===== AWS Lambda publish-layer-version:" $PROFILE
+  LAYER_NAME="flask"
+  LAYER_CODE="${LAYER_NAME}-layer.zip"
+	aws lambda publish-layer-version \
+    --layer-name $LAYER_NAME \
+		--description "${LAYER_NAME} Layer" \
+		--content S3Bucket=ipa-bia-codebase,S3Key=$LAYER_CODE
+#		--compatible-runtimes python3.7 \
+    --profile $PROFILE \
+    --output $OUTPUT
+  ;;
+
+
+"500" )
+  echo "===== V-Env Create:" $PROFILE
+  VIRTUAL_ENV="v-env"
+	virtualenv $VIRTUAL_ENV
+  echo "Try: source bin/activate"
+  echo "Try: deactivate"
+  ;;
 
 
 

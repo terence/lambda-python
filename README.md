@@ -16,5 +16,7 @@ AWS Lambda Python Repo
 # References
 - https://docs.aws.amazon.com/lambda/latest/dg/python-package.html
 - https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html
-
+- https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-template-anatomy.html
+- https://dev.to/matthewvielkind/getting-started-with-aws-lambda-layers-4ipk
+- https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
 
