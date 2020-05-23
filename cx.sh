@@ -30,9 +30,10 @@ echo 113 : AWS Lambda Delete Function
 echo 114 : AWS Lambda Get Function Configuration
 echo 115 : AWS Lambda Update Function Configuration
 echo ----------------------------------------------
-echo 200 : AWS Zip Python Package
-echo 201 : AWS S3 Upload Layer to S3
-echo 202 : AWS Lambda publish-layer-version
+echo 200 : AWS PIP install Package
+echo 201 : AWS Zip Python Package
+echo 202 : AWS S3 Upload Layer to S3
+echo 203 : AWS Lambda publish-layer-version
 echo ----------------------------------------------
 echo 500 : V-Env Create
 echo 501 : V-Env Activate
@@ -185,9 +186,20 @@ case "$SELECTION" in
 
 
 
-
-
 "200" )
+  echo "===== PIP install Package:" $PROFILE
+  LAYER_NAME="ldap"
+  LAYER_CODE="${LAYER_NAME}-layer.zip"
+  mkdir layer-$LAYER_NAME
+#	cd layer-$LAYER_NAME
+	pip3 install python-ldap -t layer-$LAYER_NAME/python
+  cd layer-$LAYER_NAME
+	rm $LAYER_NAME-layer.zip
+	zip -r $LAYER_NAME-layer.zip python
+  ;;
+
+
+"201" )
   echo "===== Zip Python Package:" $PROFILE
   LAYER_NAME="pandas"
   LAYER_CODE="${LAYER_NAME}-layer.zip"
@@ -196,7 +208,7 @@ case "$SELECTION" in
   ;;
 
 
-"201" )
+"202" )
   echo "===== S3 Upload Layer to S3:" $PROFILE
   LAYER_NAME="flask"
   LAYER_CODE="${LAYER_NAME}-layer.zip"
@@ -206,7 +218,7 @@ case "$SELECTION" in
   ;;
 
 
-"202" )
+"203" )
   echo "===== AWS Lambda publish-layer-version:" $PROFILE
   LAYER_NAME="flask"
   LAYER_CODE="${LAYER_NAME}-layer.zip"
