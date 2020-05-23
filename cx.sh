@@ -30,10 +30,15 @@ echo 113 : AWS Lambda Delete Function
 echo 114 : AWS Lambda Get Function Configuration
 echo 115 : AWS Lambda Update Function Configuration
 echo ----------------------------------------------
-echo 200 : AWS PIP install Package
-echo 201 : AWS Zip Python Package
-echo 202 : AWS S3 Upload Layer to S3
-echo 203 : AWS Lambda publish-layer-version
+echo 200 : AWS LDAP PIP install
+echo 201 : AWS LDAP Zip Python Package
+echo 202 : AWS LDAP S3 Upload Layer to S3
+echo 203 : AWS LDAP Lambda publish-layer-version
+echo ----------------------------------------------
+echo 210 : AWS FLASK PIP install
+echo 211 : AWS FLASK Zip Python Package
+echo 212 : AWS FLASK S3 Upload Layer to S3
+echo 213 : AWS FLASK Lambda publish-layer-version
 echo ----------------------------------------------
 echo 500 : V-Env Create
 echo 501 : V-Env Activate
@@ -187,7 +192,7 @@ case "$SELECTION" in
 
 
 "200" )
-  echo "===== PIP install Package:" $PROFILE
+  echo "===== PIP install and S3 upload:" $PROFILE
   LAYER_NAME="ldap"
   LAYER_CODE="${LAYER_NAME}-layer.zip"
   mkdir layer-$LAYER_NAME
@@ -196,12 +201,17 @@ case "$SELECTION" in
   cd layer-$LAYER_NAME
 	rm $LAYER_NAME-layer.zip
 	zip -r $LAYER_NAME-layer.zip python
+
+	# Upload to S3
+	aws s3 cp ./layer-$LAYER_NAME/$LAYER_CODE s3://$S3CODE/ \
+		--profile $PROFILE \
+    --output $OUTPUT
   ;;
 
 
 "201" )
   echo "===== Zip Python Package:" $PROFILE
-  LAYER_NAME="pandas"
+  LAYER_NAME="ldap"
   LAYER_CODE="${LAYER_NAME}-layer.zip"
   cd layer-$LAYER_NAME
 	zip -r $LAYER_NAME-layer.zip python
@@ -210,7 +220,7 @@ case "$SELECTION" in
 
 "202" )
   echo "===== S3 Upload Layer to S3:" $PROFILE
-  LAYER_NAME="flask"
+  LAYER_NAME="ldap"
   LAYER_CODE="${LAYER_NAME}-layer.zip"
 	aws s3 cp ./layer-$LAYER_NAME/$LAYER_CODE s3://$S3CODE/ \
 		--profile $PROFILE \
@@ -220,7 +230,7 @@ case "$SELECTION" in
 
 "203" )
   echo "===== AWS Lambda publish-layer-version:" $PROFILE
-  LAYER_NAME="flask"
+  LAYER_NAME="ldap"
   LAYER_CODE="${LAYER_NAME}-layer.zip"
 	aws lambda publish-layer-version \
     --layer-name $LAYER_NAME \
